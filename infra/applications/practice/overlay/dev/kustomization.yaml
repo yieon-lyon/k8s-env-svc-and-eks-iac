@@ -8,3 +8,12 @@ namespace: default
 images:
 - name: 576066064056.dkr.ecr.ap-northeast-2.amazonaws.com/yieon-kubernetes-secrets-updater-practice
   newTag: 0.0.1
+
+configMapGenerator:
+  - name: kube-env
+    literals:
+      - aws_access_key_id = XXXX
+      - aws_secret_access_key = XXXX
+      - kubeconfig = <<-EOF
+          XXXXXXXX
+        EOF

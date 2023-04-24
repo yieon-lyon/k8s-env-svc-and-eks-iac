@@ -28,6 +28,22 @@ spec:
               cpu: 300m
             requests:
               cpu: 300m
+          env:
+            - name: aws_access_key_id
+              valueFrom:
+                configMapKeyRef:
+                  name: kube-env
+                  key: aws_access_key_id
+            - name: aws_secret_access_key
+              valueFrom:
+                configMapKeyRef:
+                  name: kube-env
+                  key: aws_secret_access_key
+            - name: kube_config
+              valueFrom:
+                configMapKeyRef:
+                  name: kube-env
+                  key: kube_config
       tolerations:
         - effect: NoSchedule
           key: subnettype
