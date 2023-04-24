@@ -34,9 +34,9 @@ EKS
 어플리케이션 로그 확인 및 재시작
 - kubectl 명령어를 기본으로 합니다.
   - 어플리케이션 log 조회
-    - `kubectl logs [-f optional] [application-name]`
+    - `kubectl logs [-f optional] [application-name] --namespace=[app-namespace]`
   - 어플리케이션 재시작
-    - `kubectl restart deployment`
+    - `kubectl rollout restart deployment [application-name] --namespace=[app-namespace]`
 - k9s 사용을 지향합니다. kubernetes를 직관적으로 볼 수 있는 대시보드내에서 편리하게 조작이 가능합니다.
 
 IaC terraform plan
