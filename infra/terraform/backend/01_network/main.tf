@@ -14,6 +14,7 @@ resource "aws_vpc" "main" {
   tags = {
     "Name"    = "${var.project}-${var.env}"
     "cluster" = "${var.project}-${var.env}"
+    "Owner"   = "parrotbill"
   }
 }
 resource "aws_subnet" "eu-west-1a" {
@@ -24,6 +25,7 @@ resource "aws_subnet" "eu-west-1a" {
   tags = {
     "Name"    = "${var.project}-${var.env}-eu-west-1a"
     "cluster" = "${var.project}-${var.env}"
+    "Owner"   = "parrotbill"
   }
 }
 resource "aws_subnet" "eu-west-1b" {
@@ -33,6 +35,7 @@ resource "aws_subnet" "eu-west-1b" {
   tags = {
     "Name"    = "${var.project}-${var.env}-eu-west-1b"
     "cluster" = "${var.project}-${var.env}"
+    "Owner"   = "parrotbill"
   }
 }
 resource "aws_subnet" "eu-west-1c" {
@@ -42,6 +45,7 @@ resource "aws_subnet" "eu-west-1c" {
   tags = {
     "Name"    = "${var.project}-${var.env}-eu-west-1c"
     "cluster" = "${var.project}-${var.env}"
+    "Owner"   = "parrotbill"
   }
 }
 resource "aws_internet_gateway" "main" {
@@ -49,6 +53,7 @@ resource "aws_internet_gateway" "main" {
   tags = {
     "Name"    = "${var.project}-${var.env}"
     "cluster" = "${var.project}-${var.env}"
+    "Owner"   = "parrotbill"
   }
 }
 resource "aws_route_table" "rtb-09c54bb0bb94dabc8" {
@@ -74,11 +79,15 @@ resource "aws_route_table" "rtb-09c54bb0bb94dabc8" {
   tags = {
     "Name"    = "${var.project}-${var.env}-default"
     "cluster" = "${var.project}-${var.env}"
+    "Owner"   = "parrotbill"
   }
 }
 resource "aws_route_table_association" "eu-west-1c" {
   subnet_id      = aws_subnet.eu-west-1c.id
   route_table_id = aws_route_table.rtb-09c54bb0bb94dabc8.id
+  tags = {
+    "Owner"   = "parrotbill"
+  }
 }
 resource "aws_vpc_peering_connection" "default-vpc" {
   peer_owner_id = "576066064056"
@@ -88,6 +97,7 @@ resource "aws_vpc_peering_connection" "default-vpc" {
   tags = {
     "Name"    = "${var.project}-${var.env}-to-default-vpc"
     "cluster" = "${var.project}-${var.env}"
+    "Owner"   = "parrotbill"
   }
 }
 output "vpc_id" {

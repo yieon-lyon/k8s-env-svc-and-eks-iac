@@ -34,6 +34,7 @@ resource "aws_iam_role" "cluster" {
   tags = {
     "Name"    = "${var.project}-${var.env}-cluster"
     "cluster" = "${var.project}-${var.env}"
+    "Owner"   = "parrotbill"
   }
 }
 resource "aws_iam_role" "node" {
@@ -61,11 +62,15 @@ resource "aws_iam_role" "node" {
   tags = {
     "Name"    = "${var.project}-${var.env}-node"
     "cluster" = "${var.project}-${var.env}"
+    "Owner"   = "parrotbill"
   }
 }
 resource "aws_iam_instance_profile" "node" {
   name = "${var.project}-${var.env}-node"
   role = aws_iam_role.node.name
+  tags = {
+    "Owner"   = "parrotbill"
+  }
 }
 resource "aws_security_group" "default-vpc-peering" {
   name   = "${var.project}-${var.env}-default-vpc-peering"
@@ -88,6 +93,7 @@ resource "aws_security_group" "default-vpc-peering" {
   tags = {
     "Name"    = "${var.project}-${var.env}-default-vpc-peering"
     "cluster" = "${var.project}-${var.env}"
+    "Owner"   = "parrotbill"
   }
 }
 resource "aws_eks_cluster" "main" {
@@ -107,6 +113,7 @@ resource "aws_eks_cluster" "main" {
   }
   tags = {
     "cluster" = "${var.project}-${var.env}"
+    "Owner"   = "parrotbill"
   }
 }
 resource "aws_iam_role" "aws_iam_role_node_group" {
@@ -170,6 +177,7 @@ resource "aws_launch_template" "private" {
     resource_type = "instance"
     tags = {
       Name = "${var.project}-private"
+      Owner = "parrotbill"
     }
   }
   key_name = "private-ng"
