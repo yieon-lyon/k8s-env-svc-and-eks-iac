@@ -1,0 +1,52 @@
+name: application-practice build
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'version'
+        required: true
+        default: '0.0.1'
+
+jobs:
+  main:
+    runs-on: ubuntu-latest
+    env:
+      ECR_REPOSITORY: "yieon-kubernetes-secrets-updater-practice"
+      working-directory: ./application/practice/
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      - name: Docker Build
+        working-directory: ${{ env.working-directory }}
+        run: >
+          docker build -t ${{ env.ECR_REPOSITORY }} .
+
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v1
+
+      - name: Push image to Amazon ECR
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          ECR_REPOSITORY: ${{ env.ECR_REPOSITORY }}
+          IMAGE_TAG: ${{ github.event.inputs.version }}
+        run: |
+          docker tag $ECR_REPOSITORY $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+
+      - name: Add Version Tag to Git
+        uses: hole19/git-tag-action@master
+        env:
+          TAG: ${{ github.event.inputs.version }}
+          GITHUB_TOKEN: ${{ secrets.TOKEN }}
