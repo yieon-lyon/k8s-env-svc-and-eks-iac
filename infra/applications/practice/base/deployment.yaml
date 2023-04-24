@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kubernetes-secrets-updater-practice-deployment
+  namespace: kubernetes-secrets-updater-practice
+  labels:
+    app: kubernetes-secrets-updater-practice
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: kubernetes-secrets-updater-practice
+  template:
+    metadata:
+      labels:
+        app: kubernetes-secrets-updater-practice
+    spec:
+      containers:
+        - name: kubernetes-secrets-updater-practice
+          image: 576066064056.dkr.ecr.ap-northeast-2.amazonaws.com/yieon-kubernetes-secrets-updater-practice:IMAGE_TAG
+          ports:
+            - containerPort: 3000
+          envFrom:
+            - secretRef:
+                name: kubernetes-secrets-updater-practice
+          resources:
+            limits:
+              cpu: 300m
+            requests:
+              cpu: 300m
+      tolerations:
+        - effect: NoSchedule
+          key: subnettype
+          operator: Equal
+          value: private
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                  - key: subnettype
+                    operator: In
+                    values:
+                      - private
